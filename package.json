@@ -1,0 +1,17 @@
+{
+  "name": "react-native-meizu-chart",
+  "version": "0.2.0",
+  "private": true,
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git@gl.meizu.com:react/react-native-meizu-chart.git"
+  },
+  "author": {
+    "name": "Meizu Technology Co., Ltd."
+  },
+  "dependencies": {
+  }
+}
