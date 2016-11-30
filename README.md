@@ -1,8 +1,4 @@
-# react-native-meizu-chart
-
-## Start
-- npm i -S react-native-svg
-- react-native link react-native-svg
+# react-native-chart
 
 ## 配置
 width 和 height 需要精确值才能正常显示。
@@ -29,5 +25,11 @@ width 和 height 需要精确值才能正常显示。
         tagFontSize: PropTypes.number,
         tagColor: PropTypes.string,
         tagMarginTop: PropTypes.number,
+        tagSelectedColor: PropTypes.string,
         onColumnPress: PropTypes.func,
+        barMarginLeft: PropTypes.number,
+        barMarginRight: PropTypes.number,
+        selectedColor: PropTypes.string,
+        selectedSecondColor: PropTypes.string,
+        defaultSelectedIndex: PropTypes.number,
       };
