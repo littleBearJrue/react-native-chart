@@ -12,8 +12,7 @@
     "lodash": "^4.17.1",
     "react": "15.3.2",
     "react-native": "0.37.0",
-    "react-native-meizu-chart": "file:..",
-    "react-native-svg": "^4.3.3"
+    "react-native-meizu-chart": "file:.."
   },
   "jest": {
     "preset": "jest-react-native"
