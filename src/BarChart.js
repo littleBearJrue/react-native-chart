@@ -22,6 +22,7 @@ const MAX_VALUE = 100;
 const DEFAULT_COLOR = 'orangered';
 const DEFAULT_SECOND_COLOR = 'magenta';
 const DEFAULT_TAG_COLOR = 'darkgrey';
+const SCROLL_VIEW = 'bar_chart_scrollview';
 
 class BarChart extends React.Component {
 
@@ -36,6 +37,8 @@ class BarChart extends React.Component {
         secondValue: PropTypes.number,
         color: PropTypes.string,
         secondColor: PropTypes.string,
+        selectedColor: PropTypes.string,
+        selectedSecondColor: PropTypes.string,
       }
     )),
     type: PropTypes.oneOf(['vertical', 'horizontal']),  //BarChart.TYPE_VERTICAL or BarChart.TYPE_HORIZONTAL
@@ -65,6 +68,12 @@ class BarChart extends React.Component {
       selectedIndex: this.props.defaultSelectedIndex,
     };
   }
+
+  scrollTo = (y: number, x: number, animated: boolean) => {
+    if (this.refs[SCROLL_VIEW]) {
+      this.refs[SCROLL_VIEW].scrollTo({ y, x, animated });
+    }
+  };
 
   setSelectedIndex = (index: number) => {
     this.setState({ selectedIndex: index });
@@ -115,7 +124,7 @@ class BarChart extends React.Component {
         let barWidth;
         const selected = this.state.selectedIndex === index;
         if (data['value'] && data['value'] > 0) {
-          const barColor = selected ? (selectedColor || data['color'] || color) : (data['color'] || color);
+          const barColor = selected ? (data['selectedColor'] || selectedColor || data['color'] || color) : (data['color'] || color);
           barWidth = data['value'] / maxValue * barsWidth;
           rect = <TouchableHighlight
             style={{ position: 'absolute', left: startX, top: 0, right: (width - startX - barWidth), bottom: (height - rectHeight), backgroundColor: 'transparent' }}
@@ -174,7 +183,7 @@ class BarChart extends React.Component {
 
         let bar;
         if (barHeight > 0) {
-          const barColor = selected ? (selectedColor || data['color'] || color) : (data['color'] || color);
+          const barColor = selected ? (data['selectedColor'] || selectedColor || data['color'] || color) : (data['color'] || color);
           bar = <View
             style={{ position: 'absolute', left: 0, top: secondBarHeight, right: 0, bottom: 0, backgroundColor: barColor }}
           />;
@@ -184,7 +193,7 @@ class BarChart extends React.Component {
 
         let secondBar;
         if (secondBarHeight > 0) {
-          const secondBarColor = selected ? (selectedSecondColor || data['secondColor'] || secondColor) : (data['secondColor'] || secondColor);
+          const secondBarColor = selected ? (data['selectedSecondColor'] || selectedSecondColor || data['secondColor'] || secondColor) : (data['secondColor'] || secondColor);
           secondBar = <View
             style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: barHeight, backgroundColor: secondBarColor }}
           />;
@@ -213,12 +222,13 @@ class BarChart extends React.Component {
         if (bar || secondBar) {
           result = [
             (<TouchableHighlight
-              style={{ position: 'absolute', left: (index * (interval + barWidth) + barMarginLeft), top: (rectHeight - barHeight - secondBarHeight), right: (reactWidth - (index * (interval + barWidth) + barMarginLeft + barWidth)), bottom: (height - rectHeight), backgroundColor: 'transparent' }}
+              style={{ position: 'absolute', left: (index * (interval + barWidth) + barMarginLeft), top: 0, bottom: (height - rectHeight), right: (reactWidth - (index * (interval + barWidth) + barMarginLeft + barWidth)), backgroundColor: 'transparent' }}
               activeOpacity={1}
+              underlayColor={'transparent'}
               onPress={() => this._onColumnPress(index)}
             >
               <View
-                style={{ flex: 1, backgroundColor: 'transparent' }}
+                style={{ flex: 1, backgroundColor: 'transparent', marginTop:(rectHeight - barHeight - secondBarHeight) }}
               >
                 {bar}
                 {secondBar}
@@ -237,9 +247,11 @@ class BarChart extends React.Component {
 
     return (
       <ScrollView
-        contentContainerStyle={[this.props.style, { width: reactWidth, height: height }]}
+        style={this.props.style}
+        ref={SCROLL_VIEW}
+        contentContainerStyle={{ width: reactWidth, height: height }}
         horizontal={true}
-        scrollEnabled={scrollEnabled}
+        scrollEnabled={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >

@@ -9,13 +9,16 @@ import {
   StyleSheet,
   View,
   Dimensions,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
-
 import { BarChart } from 'react-native-meizu-chart';
+
+const BAR_CHART = 'bar_chart';
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    flex: 0,
     marginTop: 20,
   },
 });
@@ -43,6 +46,12 @@ class MainScreen extends React.Component {
     console.warn('_onColumnPress, ', index);
   };
 
+  componentDidMount() {
+    // if (this.refs[BAR_CHART]) {
+    //   this.refs[BAR_CHART].scrollTo(0, 50, false);
+    // }
+  }
+
   render() {
     const { width, height} = Dimensions.get('window');
     return (
@@ -50,17 +59,28 @@ class MainScreen extends React.Component {
         style={styles.main}
       >
         <BarChart
-          style={{ flex: 0, width, height: height / 3 }}
+          ref={BAR_CHART}
+          style={{ flex: 0, width, height: height / 3, backgroundColor: 'transparent' }}
           source={source}
           type={BarChart.TYPE_VERTICAL}
           maxValue={100}
-          //barWidth={40}
+          barWidth={40}
           tagColor={'green'}
           onColumnPress={this._onColumnPress}
-          //barMarginLeft={5}
-          //barMarginRight={0}
+          barMarginLeft={5}
+          barMarginRight={0}
           tagSelectedColor={'red'}
         />
+
+        <View
+          style={{ flex: 0, flexDirection: 'row', marginTop: 30, alignSelf: 'center' }}
+        >
+          <TouchableOpacity
+            onPress={() => this.refs[BAR_CHART].scrollTo(0, 100, true) }
+          >
+            <Text>{'scrollTo 100'}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
